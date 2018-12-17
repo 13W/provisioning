@@ -1,26 +1,25 @@
-module "provider" {
-  source = "./provider/hcloud"
-
-  token           = "${var.hcloud_token}"
-  ssh_keys        = "${var.hcloud_ssh_keys}"
-  location        = "${var.hcloud_location}"
-  type            = "${var.hcloud_type}"
-  image           = "${var.hcloud_image}"
-  hosts           = "${var.node_count}"
-  hostname_format = "${var.hostname_format}"
-}
-
-# module "provider" {
-#   source = "./provider/scaleway"
+#module "provider" {
+#  source = "./provider/hcloud"
 #
-#   organization    = "${var.scaleway_organization}"
-#   token           = "${var.scaleway_token}"
-#   region          = "${var.scaleway_region}"
-#   type            = "${var.scaleway_type}"
-#   image           = "${var.scaleway_image}"
-#   hosts           = "${var.node_count}"
-#   hostname_format = "${var.hostname_format}"
-# }
+#  hosts           = "${var.node_count}"
+#  token           = "${var.hcloud_token}"
+#  type            = "${var.hcloud_type}"
+#  ssh_keys        = "${var.hcloud_ssh_keys}"
+#  location        = "${var.hcloud_location}"
+#  hostname_format = "${var.hostname_format}"
+#}
+
+module "provider" {
+  source = "./provider/scaleway"
+
+  hosts           = "${var.node_count}"
+  organization    = "${var.scaleway_organization}"
+  token           = "${var.scaleway_token}"
+  hostname_format = "${var.hostname_format}"
+  region          = "${var.scaleway_region}"
+  image           = "${var.scaleway_image}"
+  type            = "${var.scaleway_type}"
+}
 
 # module "provider" {
 #   source = "./provider/digitalocean"
@@ -35,14 +34,14 @@ module "provider" {
 # }
 
 module "swap" {
-  source = "./service/swap"
+  source      = "./service/swap"
 
   count       = "${var.node_count}"
   connections = "${module.provider.public_ips}"
 }
 
 module "dns" {
-  source = "./dns/cloudflare"
+  source     = "./dns/cloudflare"
 
   count      = "${var.node_count}"
   email      = "${var.cloudflare_email}"

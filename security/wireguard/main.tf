@@ -44,15 +44,16 @@ resource "null_resource" "wireguard" {
   provisioner "remote-exec" {
     inline = [
       "echo net.ipv4.ip_forward=1 >> /etc/sysctl.conf",
+      "echo net.ipv6.conf.all.forwarding=1 >> /etc/sysctl.conf",
       "sysctl -p",
     ]
   }
 
   provisioner "remote-exec" {
     inline = [
-      "apt-get install -yq software-properties-common build-essential",
-      "add-apt-repository -y ppa:wireguard/wireguard",
-      "apt-get update",
+      "echo 'deb http://deb.debian.org/debian/ unstable main' > /etc/apt/sources.list.d/unstable-wireguard.list",
+      "printf 'Package: *\nPin: release a=unstable\nPin-Priority: 90\n' > /etc/apt/preferences.d/limit-unstable",
+      "apt update"
     ]
   }
 
@@ -62,7 +63,7 @@ resource "null_resource" "wireguard" {
 
   provisioner "remote-exec" {
     inline = [
-      "DEBIAN_FRONTEND=noninteractive apt-get install -yq wireguard-dkms wireguard-tools",
+      "DEBIAN_FRONTEND=noninteractive apt install -yq wireguard-dkms wireguard-tools",
     ]
   }
 

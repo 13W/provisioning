@@ -42,7 +42,8 @@ resource "scaleway_server" "host" {
   type                = "${var.type}"
   image               = "${data.scaleway_image.image.id}"
   bootscript          = "${data.scaleway_bootscript.bootscript.id}"
-  dynamic_ip_required = true
+  dynamic_ip_required = false
+  enable_ipv6         = true
 
   count = "${var.hosts}"
 
@@ -54,7 +55,9 @@ resource "scaleway_server" "host" {
   provisioner "remote-exec" {
     inline = [
       "apt-get update",
-      "apt-get install -yq apt-transport-https ufw ${join(" ", var.apt_packages)}",
+#      "DEBIAN_FRONTEND=noninteractive apt upgrade -yqq",
+#      "DEBIAN_FRONTEND=noninteractive apt dist-upgrade -yqq",
+      "DEBIAN_FRONTEND=noninteractive apt install -yq apt-transport-https ufw build-essential libelf-dev ${join(" ", var.apt_packages)}",
     ]
   }
 }

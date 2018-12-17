@@ -22,6 +22,7 @@ wget --quiet -O "/usr/src/linux-${upstream}.tar.xz" "https://cdn.kernel.org/pub/
 tar xf "/usr/src/linux-${upstream}.tar.xz" -C /usr/src/
 ln -fns "/usr/src/linux-${upstream}" /usr/src/linux
 ln -fns "/usr/src/linux-${upstream}" "/lib/modules/${release}/build"
+ln -fns "/usr/src/linux-${upstream}" "/lib/modules/${release}/source"
 
 # Prepare kernel
 zcat /proc/config.gz > /usr/src/linux/.config

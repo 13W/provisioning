@@ -26,7 +26,7 @@ resource "cloudflare_record" "hosts" {
   name    = "${element(var.hostnames, count.index)}"
   value   = "${element(var.public_ips, count.index)}"
   type    = "A"
-  proxied = false
+  proxied = true
 }
 
 resource "cloudflare_record" "domain" {

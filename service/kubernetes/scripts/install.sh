@@ -3,8 +3,8 @@ set -e
 
 curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
 cat <<EOF > /etc/apt/sources.list.d/kubernetes.list
-deb http://apt.kubernetes.io/ kubernetes-xenial-unstable main
+deb [arch=amd64] http://packages.cloud.google.com/apt kubernetes-xenial-unstable main
 EOF
-apt-get update
-apt-get install -y docker.io
-apt-get install -y kubelet kubeadm kubectl kubernetes-cni
+apt-get update || true
+DEBIAN_FRONTEND=noninteractive apt-get install -yq docker.io -t unstable
+DEBIAN_FRONTEND=noninteractive apt-get install -yq kubelet kubeadm kubectl kubernetes-cni

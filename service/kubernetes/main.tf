@@ -51,6 +51,12 @@ resource "null_resource" "kubernetes" {
 
   provisioner "remote-exec" {
     inline = [
+      "shutdown -r +0"
+    ]
+  }
+
+  provisioner "remote-exec" {
+    inline = [
       "apt-get install -qy jq",
       "modprobe br_netfilter && echo br_netfilter >> /etc/modules",
     ]
